@@ -56,8 +56,6 @@ case class TestDatabase() extends Database {
     else
       r
   }
-
-
 }
 
 
@@ -78,7 +76,9 @@ object DatabaseQueriesAndUpdates {
 
 
   // Task 2c
-  // def findUserId(username: String): ??? = ???
+  def findUserId(username: String): DatabaseReader[Int] = {
+    Reader(Database => Database.users.find((entry) => entry._2 == username).getOrElse((-1,""))._1)
+  }
 
   // Task 2d
   // def userExists(username: String): ??? = ???
@@ -88,7 +88,6 @@ object DatabaseQueriesAndUpdates {
 
   // Task 2f
   // def checkLogin(userId: Int, passwordClear: String): ??? = ???
-
 
   // Task 2g
 
