@@ -87,7 +87,13 @@ object Sudoku {
 
    Check that each column satisfies this requirement.
    */
-  def checkY(board: List[(Int,Int)], next: (Int,Int)): Boolean = ???
+  def checkY(board: List[(Int,Int)], next: (Int,Int)): Boolean = {
+    def check(b: Boolean, tuple: (Int, Int)): Boolean = {
+      b && ((column(tuple) == column(next) && tuple._2 != next._2) || column(tuple) != column(next))
+    }
+
+    board.foldLeft(true)(check)
+  }
 
   /*
    TASK 1b
@@ -99,18 +105,27 @@ object Sudoku {
    each tile must contain only one copy of each digit 1-9.
 
    */
-  def checkT(board: List[(Int,Int)], next: (Int,Int)): Boolean = ???
+  def checkT(board: List[(Int,Int)], next: (Int,Int)): Boolean = {
+    def check(b: Boolean, tuple: (Int, Int)): Boolean = {
+      b && ((tile(tuple) == tile(next) && tuple._2 != next._2) || tile(tuple) != tile(next))
+    }
+
+    board.foldLeft(true)(check)
+  }
+
   /*
    TASK 1c
    check that a given position has not been filled
    */
-  def notPlayed(board: List[(Int,Int)], index: Int): Boolean = ???
+  def notPlayed(board: List[(Int,Int)], index: Int): Boolean = board.foldLeft(true)((np: Boolean, next: (Int,Int)) =>
+    np && (next._1 != index || (next._1 == index && next._2 == 0))
+  )
 
   /*
    TASK 1d
    check that a given position is legal with respect to checkX, checkY, checkT
    */
-  def isLegal(board: List[(Int,Int)], next: (Int,Int)): Boolean = ???
+  def isLegal(board: List[(Int,Int)], next: (Int,Int)): Boolean = checkX(board,next) && checkY(board,next) && checkT(board,next)
 
   //recursively provide all solutions to puzzle w/ given initial conds
   def sudokuSolve(initial: List[(Int,Int)]): Set[List[(Int,Int)]] = {
@@ -122,7 +137,12 @@ object Sudoku {
     /*
      TASK 1e
      */
-    def sudokuIter(indices: List[Int]): Set[List[(Int,Int)]] = ???
+    def sudokuIter(indices: List[Int]): Set[List[(Int,Int)] ] =
+        if (indices.isEmpty) Set(initial)
+        else for {
+          board <- sudokuIter(indices.tail)
+          v <- 1 to 9 if isLegal(board, (indices.head, v))
+        } yield (indices.head,v)::board
 
     sudokuIter(indices)
   }
@@ -132,9 +152,9 @@ object Sudoku {
     if (index == -1) Set(List())
     else
       for {
-	board <- sudokuAll(index-1)
-	k <- 0 until 9
-	if isLegal(board, (index,k))
+	      board <- sudokuAll(index-1)
+	      k <- 0 until 9
+      	if isLegal(board, (index,k))
       } yield (index,k)::board
   }
 

@@ -8,7 +8,7 @@ lazy val commonSettings = Seq(
 lazy val root = (project in file(".")).
   settings(
     onLoad in Global := { Command.process("project backend", _: State) } compose (onLoad in Global).value
-  ).settings(commonSettings: _*)
+  ).settings(commonSettings: _*).aggregate(backend,frontend)
 
 
 lazy val backend = (project in file("backend")).

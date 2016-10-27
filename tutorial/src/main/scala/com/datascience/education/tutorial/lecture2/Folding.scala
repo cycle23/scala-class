@@ -17,7 +17,7 @@ object Folding {
   def foo(head: String, tail: String): String =
     "Cons(" + head + ", " + tail + ")"
 
-  def myToString2(list: List[String]) = foldRight(list,"Nil")(foo)
+  def myToString2(list: List[String]) = foldRight(list,"Nil")(foo) 
 
   myToString2(List("1","2","3","4","5"))
 
@@ -40,7 +40,7 @@ object Folding {
       case Nil => z
       case x :: xs => f(x, foldRight(xs, z)(f))
     }
-
+  
   def foldRightPrinter[A, B](list: List[A], z: B)(f:(A, B) => B): B = {
     println(s"input: $list")
     val out: B = list match {

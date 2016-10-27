@@ -8,12 +8,11 @@ object ModelProblem {
   trait Plottable[Domain, Range, T[Domain, Range]] {
     // The `= ???` is necessary to prevent compiler error; but this should be abstract!
     // Remove `= ???` upon implementation of the signature of `points`
-    def points/*???*/ = ???
-
+    def points(t: T[Domain, Range], input: List[Domain]) : List[Range]
 
     def plot(name: String, t: T[Domain, Range], input: List[Domain]): Unit = {
-      //val y = points(t, input)
-      val y = ???
+      val y = points(t, input)
+      //val y = ???
       println(s"$name: $y")
     }
     
@@ -24,19 +23,23 @@ object ModelProblem {
   // Task (6b)
   implicit object PlotDoubleDoubleModel extends Plottable[Double, Double, Model] {
 
-    ???
+    def points(t: Model[Double,Double], input: List[Double]) : List[Double] = {
+        input.map(x => t.pdf(x))
+    }
   }
 
   // Task (6c)
   implicit object PlotDoubleDoubleFunction extends Plottable[Double, Double, Function1] {
 
-    ???
+    def points(t: Function1[Double,Double], input: List[Double]) : List[Double] = {
+        input.map(x => t(x))
+    }
+    
   }
 
   // Task (6d)
   def plotter[D,R,T[D,R]](t: T[D,R], ld: List[D], name: String)
-    (implicit plottable: Plottable[D,R,T]): Unit = ???
-
+    (implicit plottable: Plottable[D,R,T]): Unit = plottable.plot(name, t, ld)
 
   def gaussianPDF(u: Double, t: Double)(d: Double): Double =
     (1/(math.sqrt(2*t*t*math.Pi)))*math.pow(math.E, -1*math.pow(d - u, 2)/(2*t*t))

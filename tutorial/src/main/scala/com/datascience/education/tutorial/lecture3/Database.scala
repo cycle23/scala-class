@@ -3,14 +3,12 @@ package com.datascience.education.tutorial.lecture3
 
 import cats.data.Reader
 import cats.syntax.applicative._
-
-import cats.MonadReader
+import cats.{Id, MonadReader}
 
 import scala.collection.mutable.{Set => MutableSet}
 import scala.collection.mutable.{HashSet => MutableHashSet}
 import scala.collection.mutable.{Map => MutableMap}
 import scala.collection.mutable.HashMap
-
 import org.mindrot.jbcrypt.BCrypt
 
 import scala.util.Random
@@ -67,10 +65,16 @@ object DatabaseQueriesAndUpdates {
 
 
   // Task 2a
-  // type DatabaseReader[A] = ???
-
+  type DatabaseReader[A] = Reader[Database, A]
+  /*
+  object DatabaseReader {
+    def apply[A](db: Database, a: A) = new DatabaseReader[A](db, a)
+  }
+  */
   // Task 2b
-  // def findUsername(userId: Int): ??? = ???
+  def findUsername(userId: Int): DatabaseReader[String] = {
+    Reader(Database => Database.users(userId))
+  }
 
 
   // Task 2c
