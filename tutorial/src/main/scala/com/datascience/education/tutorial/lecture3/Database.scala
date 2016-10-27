@@ -81,17 +81,37 @@ object DatabaseQueriesAndUpdates {
   }
 
   // Task 2d
-  // def userExists(username: String): ??? = ???
+  def userExists(username: String): DatabaseReader[Boolean] = {
+    findUserId(username).andThen((x) => x != -1)
+  }
 
   // Task 2e
-  // def checkPassword(username: String, passwordClear: String): ??? = ???
+  def checkPassword(username: String, passwordClear: String): DatabaseReader[Boolean] = {
+    Reader(Database => {
+      val (_, pwdHash) = Database.passwords(username)
+      BCrypt.checkpw(passwordClear, pwdHash)
+    })
+  }
 
   // Task 2f
-  // def checkLogin(userId: Int, passwordClear: String): ??? = ???
+  def checkLogin(userId: Int, passwordClear: String): DatabaseReader[Boolean] = {
+    findUsername(userId).flatMap((x) => checkPassword(x, passwordClear))
+  }
 
   // Task 2g
-
-  // def createUser(username: String, passwordClear: String): ??? = ???
+  def createUser(username: String, passwordClear: String): DatabaseReader[Int] = {
+    findUserId(username).flatMap((id) => {
+      id match {
+        case -1 => Reader(Database => {
+          val id = Database.genId
+          Database.users(id) = username
+          val salt = BCrypt.gensalt()
+          Database.passwords(username) = (salt,BCrypt.hashpw(passwordClear, salt))
+          id})
+        case _ => Reader(Database => id)
+      }
+    })
+  }
 
 }
 
