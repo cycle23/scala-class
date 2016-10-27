@@ -15,7 +15,7 @@ object TypeLinearization {
   }
 
   // Task (3a)
-  class Frog
+  class Frog extends Animal with Amphibian with Philosophical
 
 }
 

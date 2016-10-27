@@ -9,7 +9,7 @@ object Common {
 
   // Task 5b
   // use Scala 2.11.8
-  val scalaVer: String = ???
+  val scalaVer: String = "2.11.8"
 
   /*
    http://www.scala-sbt.org/0.13/docs/Resolvers.html
@@ -21,10 +21,20 @@ object Common {
    */
 
   // Task 5c
-  lazy val otherResolvers: Seq[Resolver] = ???
+  lazy val otherResolvers: Seq[Resolver] = Seq(
+      Resolver.bintrayRepo("non","maven"),
+      Resolver.sonatypeRepo("releases")
+  )
 
   // Task 5a and Task 5g
-  lazy val commonSettings: Seq[Def.Setting[_]] = ???
+  lazy val commonSettings: Seq[Def.Setting[_]] = Seq(
+      version := "0.1",
+      scalaVersion := scalaVer,
+      organization := "com.datascience.education",
+      scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
+      resolvers ++= otherResolvers,
+      libraryDependencies ++= Dependencies.commonDependencies
+  )
 
 }
 
