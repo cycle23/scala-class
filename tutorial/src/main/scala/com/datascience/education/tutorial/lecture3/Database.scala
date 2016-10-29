@@ -64,11 +64,6 @@ object DatabaseQueriesAndUpdates {
 
   // Task 2a
   type DatabaseReader[A] = Reader[Database, A]
-  /*
-  object DatabaseReader {
-    def apply[A](db: Database, a: A) = new DatabaseReader[A](db, a)
-  }
-  */
   // Task 2b
   def findUsername(userId: Int): DatabaseReader[String] = {
     Reader(Database => Database.users(userId))
@@ -82,7 +77,7 @@ object DatabaseQueriesAndUpdates {
 
   // Task 2d
   def userExists(username: String): DatabaseReader[Boolean] = {
-    findUserId(username).andThen((x) => x != -1)
+    findUserId(username).andThen(x => x != -1)
   }
 
   // Task 2e
@@ -100,7 +95,7 @@ object DatabaseQueriesAndUpdates {
 
   // Task 2g
   def createUser(username: String, passwordClear: String): DatabaseReader[Int] = {
-    findUserId(username).flatMap((id) => {
+    findUserId(username).flatMap(id => {
       id match {
         case -1 => Reader(Database => {
           val id = Database.genId
