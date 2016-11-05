@@ -43,7 +43,7 @@ object AsynchronousFactorialsExample extends App {
 import cats.syntax.applicative._
 import cats.syntax.writer._
 import cats.data.Writer
-import cats.instances.all._
+import cats.std.all._
 
 object FactorialWriter {
 

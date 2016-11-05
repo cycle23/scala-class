@@ -32,6 +32,6 @@ object EmployeesSpec {
 import EmployeesSpec._
 
 // uncomment when ready to test
-// class EmployeesSpec
-//     extends CommonEmployeesSpec()(employeeTypeclass _, employeesTypeclass)
+class EmployeesSpec
+     extends CommonEmployeesSpec()(employeeTypeclass _, employeesTypeclass)
 

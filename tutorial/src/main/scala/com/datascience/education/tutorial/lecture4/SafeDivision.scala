@@ -14,7 +14,13 @@ object SafeDivision {
 
   // Task (2a)
   def safeDiv(x: Int, y: Int): Option[Double] =
-    ???
+    try {
+      val r = x / y
+      if (r.equals(Double.NaN) || r.equals(Double.NegativeInfinity) || r.equals(Double.PositiveInfinity)) None
+      else Some(r)
+    } catch {
+      case e: java.lang.ArithmeticException => None
+    }
 
   def divTuple(tup: (Int, Int)): Option[Double] =
     safeDiv(tup._1, tup._2)
@@ -24,13 +30,17 @@ object SafeDivision {
   
   // Task (2b)
   def traverseFractions(ll: List[(Int, Int)]): Option[List[Double]] = 
-    ???
+    traverse(ll)(divTuple)
 
 
   // Task (2c)
   def traverseSqrtFractions(ll: List[(Int, Int)]): Option[List[Double]] =
-    ???
-
+    traverse(ll)(y => divTuple(y).flatMap(x => {
+      Math.sqrt(x) match {
+        case Double.NaN => None
+        case xx => Some(xx)
+      }
+    }))
 }
 
 
@@ -50,7 +60,7 @@ object SafeDivisionTraversalExamples extends App {
   import SafeDivision._
 
   val a = (6 to 11).toList
-  val b = (-3 to 2).toList
+  val b = (-3 to 6).toList
   val fracsFailing: List[Tuple2[Int, Int]] = a.zip(b)
 
   val optionList1: Option[List[Double]] =
@@ -86,5 +96,3 @@ object SafeDivisionTraversalExamples extends App {
   println(optionSqrt2)
 
 }
-
-
