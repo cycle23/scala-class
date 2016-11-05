@@ -14,14 +14,12 @@ object EmptySet {
   def sumList2(l: List[Int]) = l.foldRight(0)(_ + _)
   def prodList2(l: List[Double]) = l.foldRight(1.0)(_ * _)
 
-
-
   // Task (1a)
   def sum(l: List[Int]): Option[Int] = {
     def sum2(i: Option[Int], l: List[Int]): Option[Int] = {
       l match {
         case Nil => i
-        case x :: xs => sum2(i.orElse(Some(x)).map(ii => ii + x), xs)
+        case x :: xs => sum2(i.orElse(Some(0)).map(ii => ii + x), xs)
       }
     }
     sum2(None, l)
@@ -32,7 +30,7 @@ object EmptySet {
     def product2(i: Option[Double], l: List[Double]): Option[Double] = {
       l match {
         case Nil => i
-        case x :: xs => product2(i.orElse(Some(x)).map(ii => ii * x), xs)
+        case x :: xs => product2(i.orElse(Some(1.0)).map(ii => ii * x), xs)
       }
     }
     product2(None, l)
@@ -41,12 +39,12 @@ object EmptySet {
 
   // Task (1c)
   def sum2(l: List[Int]): Option[Int] =
-    l.foldRight(None: Option[Int])((x,acc) => acc.orElse(Some(x)).map(ii => ii + x))
+    l.foldRight(None: Option[Int])((x,acc) => acc.orElse(Some(0)).map(ii => ii + x))
 
   // Task (1d)
 
   def product2(l: List[Double]): Option[Double] =
-    l.foldRight(None: Option[Double])((x, acc) => acc.orElse(Some(x)).map(ii => ii * x))
+    l.foldRight(None: Option[Double])((x, acc) => acc.orElse(Some(1.0)).map(ii => ii * x))
 
 }
 

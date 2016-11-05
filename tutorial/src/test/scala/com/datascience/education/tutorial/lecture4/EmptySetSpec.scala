@@ -28,5 +28,5 @@ object EmptySetSpec {
 
 import EmptySetSpec._
 
-// class EmptySetSpec
-//     extends CommonEmptySetSpec()(emptySetTypeclass)
+class EmptySetSpec
+     extends CommonEmptySetSpec()(emptySetTypeclass)
