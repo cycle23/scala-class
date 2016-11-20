@@ -65,19 +65,17 @@ object RequestResponse {
   // Task 3a
   def sendRequest(request: Request):
       Xor[BadRequestException, Response] =
-    ???
+    Xor.catchOnly[BadRequestException](sendRequestUnsafe(request))
 
   // Task 3b
   def unpackResponse(response: Response)(outOfMemory: Boolean):
       Xor[CorruptPayloadException, Payload] =
-    ???
+    Xor.catchOnly[CorruptPayloadException](unpackResponseUnsafe(response, outOfMemory))
 
   // Task 3c
   def client(request: Request, outOfMemory: Boolean = false):
       Xor[ClientException, Payload] =
-    ???
-
-
+  sendRequest(request).flatMap{x => unpackResponse(x)(outOfMemory)}
 }
 
 object RequestResponseExample extends App {
@@ -97,13 +95,14 @@ object RequestResponseExample extends App {
   println("Catastrophic exception should not be caught")
 
   // Task 3d
-  // requests.foreach { request =>
-  //   val payload: Xor[Throwable, Payload] = client(request, true)
-  //   println("------------------")
-  //   println(s"sending request: $request")
-  //   println(payload)
-  // }
-
+  /*
+  requests.foreach { request =>
+     val payload: Xor[Throwable, Payload] = client(request, true)
+     println("------------------")
+     println(s"sending request: $request")
+     println(payload)
+  }
+  */
 
 }
 

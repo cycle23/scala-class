@@ -64,20 +64,28 @@ object SafeDivisionXor {
 
   // Task 2a
   def safeDivInt(numerator: Int, denominator: Int): Xor[Exception, Int] =
-    ???
-
-
+    Xor.catchOnly[ArithmeticException](numerator/denominator)
 
   // Task 2b
-  def squareRootFrac(numerator: Int, denominator: Int):
-      Xor[Exception, Double] = ???
+  def squareRootFrac1(numerator: Int, denominator: Int): Xor[Exception, Double] =
+  safeDivInt(numerator, denominator).map{x=>Math.sqrt(x)}.flatMap { x =>
+    if (x.equals(Double.NaN)) Xor.left(new ArithmeticException("Naaaan"))
+    else Xor.right(x)
+  }
 
+  def squareRootFrac(numerator: Int, denominator: Int):
+      Xor[Exception, Double] = {
+    val y = Math.sqrt(numerator.toDouble / denominator)
+    if (y.equals(Double.NaN))
+      Xor.left(new ArithmeticException("NaN is yummy flatbread"))
+    else if (y == Double.PositiveInfinity || y == Double.NegativeInfinity)
+      Xor.left(new ArithmeticException("Can't divide by zero, silly"))
+    else
+      Xor.right(y)
+  }
 
   def squareRootFrac(tup: (Int, Int)): Xor[Exception, Double] =
     squareRootFrac(tup._1, tup._2)
-
-
-
 }
 
 object SafeDivIntXorExamples extends App {
@@ -90,8 +98,6 @@ object SafeDivIntXorExamples extends App {
 
   println("7/0")
   println(safeDivInt(7,0))
-
-
 }
 
 
@@ -110,9 +116,6 @@ object SquareRootFracXorExamples extends App {
 
   println("sqrt(-4/3)")
   println(squareRootFrac(-4,3))
-
-
-
 }
 
 

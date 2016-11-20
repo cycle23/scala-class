@@ -1,11 +1,11 @@
 package com.datascience.education.tutorial.lecture4a
+import XorErrors._
 
 import cats.data.Xor
 import cats.data.Xor.Left
 import cats.data.Xor.Right
 import cats.data.NonEmptyList
 import org.apache.commons.validator.routines.EmailValidator
-import XorErrors._
 
 import scala.language.higherKinds
 
@@ -16,7 +16,10 @@ object XorWebFormVerifier
   val alpha = (('a' to 'z') ++ ('A' to 'Z')).toSet
 
   def isAlpha(string: String): XorErrors[String, String] =
-    ???
+    //XorErrors.concatErrors(string.map(x => Left("nope")))
+    Left(NonEmptyList("test"))
+    //??? // if (string.foldRight(true)((x,z) => alpha.contains(x)))
+
 
   def minimumLength(minLength: Int)(string: String): XorErrors[String, String] =
     ???

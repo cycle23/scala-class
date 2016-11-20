@@ -18,15 +18,15 @@ object ResponseList {
 
   // Task 4a
   def parsePayload(payload: Payload): Xor[NumberFormatException, Int] =
-    ???
+    Xor.catchOnly[NumberFormatException](payload.pay.toInt)
 
   // Task 4b
   def pipeline(request: Request): Xor[Exception, Int] =
-    ???
+    client(request) flatMap parsePayload
 
   // Task 4c
   def sum(lr: List[Request]): XorException[Int] =
-    ???
+    TraverseXor.traverse(lr)(pipeline).map(x => x.sum)
 }
 
 object ResponseListExample extends App {
